@@ -1,0 +1,13 @@
+@keyframes enlargeAndCenter {
+  0% {
+    transform: scale(1);
+    left: 0;
+    top: 0;
+  }
+  100% {
+    transform: scale(2);
+    left: 50%;
+    top: 50%;
+    transition: transform 0.5s ease-in-out, left 0.5s ease-in-out, top 0.5s ease-in-out;
+  }
+}

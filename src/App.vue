@@ -1,22 +1,25 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Inicio</RouterLink>
+        <RouterLink to="/about">Mis libros</RouterLink>
       </nav>
     </div>
   </header>
 
   <RouterView />
 </template>
+
+- libros que has leido
+- libros que quieres leer
+- libros que estas leyendo
+- libros que has abandonado
+- libros que te han recomendado
+- se pueden mandar recomendaciones por mail
 
