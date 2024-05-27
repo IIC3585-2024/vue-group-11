@@ -4,11 +4,9 @@
   <div v-if="open">
     <div class="vue-modal" v-show="open">
       <transition name="slide">
-        <div class="veu-modal-inner">
-          <div class="vue-modal-content">
-            <button type="button" @click="$emit('close')">Cerrar</button>
-            <div class="container">
-              <div class="book-content">
+                <div class="book-content">
+                <button type="button" class="back-button" @click="$emit('close')"><img src="../assets/leftarrow.png" alt="Back" class="icon-arrow"></button>
+                <button type="button" class="add-button" @click="$emit('close')"><img src="../assets/star-empty.png" alt="Back" class="icon-star"></button>
                 <div class="book" v-for="(book, index) in transformBookData" :key="index" ref="books">
                   <template v-if="book.cover">
                     <div class="face-front" :style="{ backgroundImage: 'url(' + book.image + ')', backgroundSize: '100% 100%' }" @click="flipCard($event, book)">
@@ -33,9 +31,9 @@
                   </template>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            <!-- </div> -->
+          <!-- </div> -->
+        <!-- </div> -->
       </transition>
     </div>
   </div>
@@ -154,19 +152,43 @@ export default {
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
-.vue-modal-inner {
-  max-width: 500px;
-  margin: 2rem auto;
+.back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-left: 10px;
+  background-color: #3b2b1a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.vue-modal-content {
-  position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  background-clip: padding-box;
-  border-radius: 0.3rem;
-  padding: 1rem;
+.add-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #3b2b1a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.icon-arrow {
+  width: 40px;
+  height: 40px;
+}
+
+.icon-star {
+  width: 30px;
+  height: 30px;
 }
 
 *{
@@ -183,26 +205,27 @@ h1{
   text-align: center;
   margin: 20px 0;
 }
-.container, .book-content{
+
+.book-content{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  vertical-align: middle;
-}
-.container{
-	width: 100%;
+  padding-top: 10px;
 }
 
 .book-content, .book-content-page{
-	width: 660px;
+	width: 860px;
 	height: 485px;
 	position: relative;
   justify-content: flex-end;
 	perspective: 1000px;
-  border-radius: 0.3rem;
-  background-image: url('../assets/table2_big.png'); 
-  padding-right: 45px;
+  padding-right: 125px;
+  border: 6px solid #3b2b1a;
+  border-radius: 20px;
+  background-color: #3b2b1a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
 .book{
   margin: 10px;
 	position: absolute;
@@ -212,7 +235,9 @@ h1{
 	transform-style: preserve-3d;
 	transform-origin: left; 
   justify-content: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
 }
+
 .face-front, .face-back{
 	width: 100%;
 	height: 100%;
