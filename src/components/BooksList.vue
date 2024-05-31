@@ -3,9 +3,6 @@
 <template>
   <div class="back-container">
     <h1 class="text-title">{{ titlePage }}</h1>
-    <div>
-      <button @click="this.$emit('redirectPage')" class="button-mybooks">{{ buttonText }}</button>
-    </div>
     <div class="navigation-arrows">
       <button @click="previousPage" class="arrow-left">&lt;</button>
       <button @click="nextPage" class="arrow-right">&gt;</button>
@@ -25,8 +22,6 @@
 <script>
 import ModalBook from './ModalBook.vue';
 import Modal from "./Modal.vue"
-import { ref } from "vue";
-import axios from 'axios'
 
 export default {
   name: 'BooksList',
@@ -34,7 +29,6 @@ export default {
     books: Array,
     currentPage: Number,
     titlePage: String,
-    buttonText: String
   },
   components: {    
     ModalBook,
@@ -89,6 +83,7 @@ export default {
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 50px;
+  padding-bottom: 50px;
   background-color: #cbcdce;
 }
 
