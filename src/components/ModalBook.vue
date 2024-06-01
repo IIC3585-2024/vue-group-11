@@ -31,13 +31,22 @@
             </template>
           </div>
           <div v-if="!bookIsInCompleted" class="completed-button">
-            <button @click="addBookToCompleted"><img src="../assets/completed.png" alt="Completed" class="icon is-large"></button>            
+            <button @click="addBookToCompleted"><img src="../assets/completed-green.png" alt="Completed" class="icon is-large"></button>            
+          </div>
+          <div v-else class="completed-button">
+            <button @click="removeBookFromCompleted"><img src="../assets/completed-red.png" alt="Completed" class="icon is-large"></button>
           </div>
           <div v-if="!bookIsInRecommended" class="recommended-button">
-            <button @click="addBookToRecommended"><img src="../assets/recommend.png" alt="Recommended" class="icon is-large"></button>
+            <button @click="addBookToRecommended"><img src="../assets/recommended-green.png" alt="Recommended" class="icon is-large"></button>
+          </div>
+          <div v-else class="recommended-button">
+            <button @click="removeBookFromRecommended"><img src="../assets/recommended-red.png" alt="Recommended" class="icon is-large"></button>
           </div>
           <div v-if="!bookIsInNext" class="next-button">
-            <button @click="addBookToNext"><img src="../assets/next.png" alt="Next" class="icon is-large"></button>
+            <button @click="addBookToNext"><img src="../assets/next-green.png" alt="Next" class="icon is-large"></button>
+          </div>
+          <div v-else class="next-button">
+            <button @click="removeBookFromNext"><img src="../assets/next-red.png" alt="Next" class="icon is-large"></button>
           </div>
         </div>
       </transition>
@@ -220,6 +229,39 @@ export default {
       currentFavoriteBooks.push(this.bookData);
       localStorage.setItem('favoriteBooks', JSON.stringify(currentFavoriteBooks));
       this.bookIsInFavorite = true;
+    },
+    removeBookFromCompleted() {
+      let currentCompletedBooks = JSON.parse(localStorage.getItem('completedBooks'));
+      currentCompletedBooks = currentCompletedBooks.filter(book => book.id !== this.bookData.id);
+      localStorage.setItem('completedBooks', JSON.stringify(currentCompletedBooks));
+      this.bookIsInCompleted = false;
+      if (this.$route.name === 'mybooks') {
+        window.location.reload();
+      }
+    },
+    removeBookFromRecommended() {
+      let currentRecommendedBooks = JSON.parse(localStorage.getItem('recommendedBooks'));
+      currentRecommendedBooks = currentRecommendedBooks.filter(book => book.id !== this.bookData.id);
+      localStorage.setItem('recommendedBooks', JSON.stringify(currentRecommendedBooks));
+      this.bookIsInRecommended = false;
+      if (this.$route.name === 'recommended') {
+        window.location.reload();
+      }
+    },
+    removeBookFromNext() {
+      let currentNextBooks = JSON.parse(localStorage.getItem('nextBooks'));
+      currentNextBooks = currentNextBooks.filter(book => book.id !== this.bookData.id);
+      localStorage.setItem('nextBooks', JSON.stringify(currentNextBooks));
+      this.bookIsInNext = false;
+      if (this.$route.name === 'nextbooks') {
+        window.location.reload();
+      }
+    },
+    removeBookFromFavorite() {
+      let currentFavoriteBooks = JSON.parse(localStorage.getItem('favoriteBooks'));
+      currentFavoriteBooks = currentFavoriteBooks.filter(book => book.id !== this.bookData.id);
+      localStorage.setItem('favoriteBooks', JSON.stringify(currentFavoriteBooks));
+      this.bookIsInFavorite = false;
     }
   }
 };

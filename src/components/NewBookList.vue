@@ -115,7 +115,7 @@
   }
   
   .book-icon.empty-book {
-    background-color: #ddd; /* Un color de fondo para los espacios vacíos */
+    background-color: #ebac6e; /* Un color de fondo para los espacios vacíos */
   }
   
   .grid-container > div::after {
