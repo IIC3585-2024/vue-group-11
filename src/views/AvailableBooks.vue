@@ -31,7 +31,6 @@ export default {
         .get(`https://www.googleapis.com/books/v1/volumes?q=a&startIndex=${currentPageParam * 40}&maxResults=40`)
         .then(response => {
           this.booksData = response.data.items;
-          // console.log(this.booksData);
         })
         .catch(error => {
           console.error('Error fetching books:', error);

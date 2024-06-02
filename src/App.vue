@@ -6,7 +6,7 @@
         <RouterLink class="navbar-item" to="/mybooks">Completados</RouterLink> 
         <RouterLink class="navbar-item" to="/recommended">Recomendados</RouterLink>
         <RouterLink class="navbar-item" to="/nextbooks">Siguientes</RouterLink> 
-        <a class="navbar-item">Favoritos</a>    
+        <RouterLink class="navbar-item" to="/favorites">Favoritos</RouterLink> 
       </div>
       <div class="navbar-end">
         <RouterLink class="navbar-item" to="/availables">Disponibles</RouterLink>

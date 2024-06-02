@@ -1,34 +1,26 @@
-<!-- https://github.com/Javierfelixuts/flip-book/tree/master/flip-book -->
-
 <template>
   <div v-if="open">
     <div class="vue-modal" v-show="open">
-      <transition name="slide">
-        <div class="book-content">
+      <div class="table">
+        <div class="book-container">
           <button type="button" class="back-button" @click="$emit('close')"><img src="../assets/x.png" alt="Back" class="icon is-medium"></button>
-          <button type="button" class="favorite-button" @click="$emit('close')"><img src="../assets/star-empty.png" alt="Favorite" class="icon is-medium"></button>
-          <div class="book" v-for="(book, index) in transformBookData" :key="index" ref="books">
-            <template v-if="book.cover">
-              <div class="face-front" :style="{ backgroundImage: 'url(' + book.image + ')', backgroundSize: '100% 100%' }" @click="flipCard($event, book)">
-              </div>
-              <div class="face-back" @click="flipCard($event, book)">
-              </div>
-            </template> 
-            <template v-else>
-              <div class="face-front" @click="flipCard($event, book)">
-                <h1 class="inside-page-front">{{ book.title }}</h1>
-                <p class="inside-page-front">{{ book.description }}</p>
-                <p class="inside-page-front">{{ book.publishedDate }}</p>
-                <p class="inside-page-front">{{ book.plubisher }}</p>
-                <p class="inside-page-front">{{ book.contentVersion }}</p>
-                <p class="inside-page-front">{{ book.plubisher }}</p>
-                <p class="inside-page-front">{{ book.authors.join(', ')}}</p>
-              </div>
-              <div class="face-back" @click="flipCard($event, book)">
-                {{ book.title2 }}
-                {{ book.description2 }}
-              </div>
-            </template>
+          <div v-show="showAtras" class="page" @click="flipPage" :style="transformBookData[currentPage].cover ? 'background-color: #3b2b1a; border: 0px; border-left: 5px solid #3b2b1a;' : ''">
+          </div>
+          <Transition name="flip" @before-enter="beforeEnter" @after-leave="afterLeave" v-if="currentPage !== numPages - 1">
+            <div v-show="show" :key="currentPage" class="page" @click="flipPage" style="position: fixed; top: 173px; left: 842px;">
+              <img v-if="transformBookData[currentPage].cover" :src="transformBookData[currentPage].image" alt="Book cover" style="width: 100%; height: 100%;">
+              <PageContent v-else :bookData="transformBookData[currentPage]"/>
+            </div>
+          </Transition>
+          <div v-show="showAdelante" class="page" @click="flipPage">
+            <PageContent :bookData="transformBookData[currentNextPage]"/>
+          </div>
+          
+          <div v-if="!bookIsInFavorite" class="favorite-button">
+            <button @click="addBookToFavorite"><img src="../assets/star-empty.png" alt="Favorite" class="icon is-large"></button>            
+          </div>
+          <div v-else class="favorite-button">
+            <button @click="removeBookFromFavorite"><img src="../assets/star.png" alt="Favorite" class="icon is-large"></button>
           </div>
           <div v-if="!bookIsInCompleted" class="completed-button">
             <button @click="addBookToCompleted"><img src="../assets/completed-green.png" alt="Completed" class="icon is-large"></button>            
@@ -49,14 +41,18 @@
             <button @click="removeBookFromNext"><img src="../assets/next-red.png" alt="Next" class="icon is-large"></button>
           </div>
         </div>
-      </transition>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import PageContent from './PageContent.vue';
 
 export default {
+  components: {
+    PageContent
+  },
   props: {
     open: {
       type: Boolean,
@@ -66,9 +62,12 @@ export default {
   },
   data() {
     return {
-      rotation: 0,
-      contZindex: 2,
-      customZindex: 1,
+      show: true,
+      showAtras: false,
+      showAdelante: false,
+      currentPage: 0,
+      currentNextPage: 1,
+      numPages: 4,
       recommendedBooks: [],
       completedBooks: [],
       nextBooks: [],
@@ -77,9 +76,13 @@ export default {
       bookIsInCompleted: false,
       bookIsInNext: false,
       bookIsInFavorite: false,
-    };
+    }
   },
   mounted() {
+    if (localStorage.getItem('favoriteBooks')) {
+      this.completedBooks = JSON.parse(localStorage.getItem('completedBooks'));
+    }  
+
     if (localStorage.getItem('completedBooks')) {
       this.completedBooks = JSON.parse(localStorage.getItem('completedBooks'));
     }  
@@ -110,74 +113,55 @@ export default {
   computed: {
     transformBookData() {
       const bookInfo = this.bookData.volumeInfo;
-      // console.log(bookInfo)
 
-      return [
-        {
-          cover: false,
-          title: "Editorial:",
-          description: bookInfo.description || 'No publisher available',
-          title2: "",
-          description2: '',
-          authors: []
-        },  
-        {
-          cover: false,
-          firstPage: true,
-          title: bookInfo.title || 'Title not available',
-          description: bookInfo.subtitle || '',
-          publishedDate: bookInfo.publishedDate || 'No date available',
-          plubisher: bookInfo.publisher || 'No publisher available',
-          authors: bookInfo.authors || [],
-          contentVersion: bookInfo.contentVersion || 'No content version available',
-          title2: "Precio:",
-          description2: this.bookData.price || 'No price available'
-        },
-        {
+      return [{
           cover: true,
           image: bookInfo.imageLinks.thumbnail || null,
+        }, {
+          cover: false,
+          title: bookInfo.title || 'Title not available',
+          authors: bookInfo.authors || [],
+        }, {
+          cover: false,
+          title: "Detalles:",
+          publishedDate: bookInfo.publishedDate || 'No date available',
+          plubisher: bookInfo.publisher || 'No publisher available',
+          contentVersion: bookInfo.contentVersion || 'No content version available',
+          authors: []
+        }, {
+          cover: false,
+          title: "Descripción:",
+          description: bookInfo.description || 'No description available',
+          authors: []
         }
       ]
     }
   },
   methods: {
-    handleImageClick(event, book) {
-      console.log("uno", event.target)
-      event.stopPropagation(); // Stop event propagation
-      console.log(event.target)
-      this.flipCard(event, book); // Call flipCard method
+    flipPage() {
+      if (this.currentPage === this.numPages - 1) {
+        this.showAtras = false
+        this.showAdelante = false
+        this.currentPage = 0
+        this.currentNextPage = 1
+        this.show = true
+      } else {
+        this.show = false
+        this.showAtras = true
+        this.showAdelante = true
+        if (this.currentPage === this.numPages - 1) {
+          this.showAdelante = false
+          this.showAtras = false
+        }
+      }
     },
-    flipCard(event, book) {
-      const target = event.target;
-      console.log(target)
-      const bookElement = target.closest('.book');
-      const front = bookElement.querySelector('.face-front');
-      const back = bookElement.querySelector('.face-back');
-
-      bookElement.style.zIndex = this.contZindex;
-      this.contZindex++;
-
-      if (target.classList.contains('face-cover')) {
-        bookElement.style.zIndex = this.contZindex;
-        this.contZindex += 20;
-        setTimeout(() => {
-          bookElement.style.transform = 'rotateY(-180deg)';
-        }, 500);
-      }
-      if (target.classList.contains('face-front') || target.classList.contains('inside-page-front')) {
-        bookElement.style.zIndex = this.contZindex;
-        this.contZindex += 20;
-        setTimeout(() => {
-          bookElement.style.transform = 'rotateY(-180deg)';
-        }, 500);
-      }
-      if (target.classList.contains('face-back')) {
-        bookElement.style.zIndex = this.contZindex;
-        this.contZindex += 20;
-        setTimeout(() => {
-          bookElement.style.transform = 'rotateY(0deg)';
-        }, 500);
-      }
+    beforeEnter() {
+      this.currentNextPage = (this.currentPage + 1) % this.numPages
+    },
+    afterLeave() {
+      this.currentPage = (this.currentPage + 1) % this.numPages
+      this.currentNextPage = this.currentPage
+      this.show = true
     },
     checkBookInLists() {
       let searched_id = this.bookData.id;
@@ -262,40 +246,81 @@ export default {
       currentFavoriteBooks = currentFavoriteBooks.filter(book => book.id !== this.bookData.id);
       localStorage.setItem('favoriteBooks', JSON.stringify(currentFavoriteBooks));
       this.bookIsInFavorite = false;
+      if (this.$route.name === 'favorites') {
+        window.location.reload();
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped>
-*,
-::before,
-::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+	font-family: sans-serif;
 }
 
 .vue-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  justify-content: center;
-  align-items: center;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+overflow-x: hidden;
+overflow-y: auto;
+background-color: rgba(0, 0, 0, 0.5);
+z-index: 1;
+justify-content: center;
+align-items: center;
+display: flex;
+}
+
+.table {
+	width: 860px;
+	height: 600px;
+	position: relative;
+  justify-content: flex-end;
+	/* perspective: 1000px; */
+  /* padding-right: 125px; */
+  border-radius: 20px;
+  background-color: #3b2b1a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-container {
   display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.page {
+width: 275px;
+height: 400px;
+background-color: #fff;
+border: 1px solid #ccc;
+display: flex;
+justify-content: center;
+align-items: center;
+transform-origin: left center;
+}
+
+.movePage {
+  position: fixed; top: 173px; left: 843px;
+}
+
+.flip-enter-active, .flip-leave-active {
+transition: transform 0.8s ease-in-out;
+}
+
+.flip-enter, .flip-leave-to {
+transform: rotateY(-90deg);
 }
 
 .back-button {
   position: absolute;
   top: 1%;
   left: 0;
-  padding-left: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
   background-color: #3b2b1a;
   color: white;
   border: none;
@@ -307,7 +332,8 @@ export default {
   position: absolute;
   top: 1%;
   right: 0;
-  padding-right: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
   background-color: #3b2b1a;
   color: white;
   border: none;
@@ -334,100 +360,8 @@ export default {
 .next-button {
   position: absolute;
   bottom: 15px;
+  right: 15%;
   border: none;
   cursor: pointer;
-}
-
-*{
-	padding: 0;
-	margin: 0;
-	font-family: sans-serif;
-}
-p{
-	margin-top: 10px;
-	font-size: 13px;
-	text-align: justify;
-}
-h1{
-  text-align: center;
-  margin: 20px 0;
-}
-
-.book-content{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-  padding-top: 5px;
-}
-
-.book-content, .book-content-page{
-	width: 860px;
-	height: 600px;
-	position: relative;
-  justify-content: flex-end;
-	perspective: 1000px;
-  padding-right: 125px;
-  border: 6px solid #3b2b1a;
-  border-radius: 20px;
-  background-color: #3b2b1a;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.book{
-  margin: 10px;
-	position: absolute;
-	width: 275px;
-	height: 70%;
-	transition: 1s;
-	transform-style: preserve-3d;
-	transform-origin: left; 
-  justify-content: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
-}
-
-.face-front, .face-back{
-	width: 100%;
-	height: 100%;
-	background: #eeebeb;
-	padding: 15px;
-	box-sizing: border-box;
-	overflow: hidden;
-  overflow-y: auto;
-}
-.face-front{
-	box-shadow: inset 3px 0px 10px -7px black;
-	border-top-left-radius: 3px;
-	border-bottom-left-radius: 3px;
-}
-.face-front img{
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-}
-.face-back{
-	position: absolute;
-	top: 0;
-	left: 0;
-	transform: translateZ(-1px) rotateY(180deg);
-	box-shadow: inset -3px 1px 10px -7px black;
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-}
-#portada-back{
-	background: url('../img/portadaBack.jpg');
-}
-#portada, #portada-back{
-	background-size: 100% 100%;
-}
-.trnsf{
-	transform: translateX(80px);
-}
-.trnsf-reset{
-	transform: translateX(0px);
-}
-@media screen and (max-width: 800px){
-	p{
-		font-size: 12px;
-	}
 }
 </style>

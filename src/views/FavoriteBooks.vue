@@ -8,19 +8,19 @@
 import BooksList from '../components/NewBookList.vue';
 
 export default {
-  name: 'RecommendedBooks',
+  name: 'FavoriteBooks',
   components: {
     BooksList
   },
   data() {
     return {
       booksData: [],
-      titlePage: "Recomendados",
+      titlePage: "Favoritos",
     };
   },
   mounted() {
-    if (localStorage.getItem('recommendedBooks')) {
-      this.booksData = JSON.parse(localStorage.getItem('recommendedBooks'));
+    if (localStorage.getItem('favoriteBooks')) {
+      this.booksData = JSON.parse(localStorage.getItem('favoriteBooks'));
     }    
   }
 }

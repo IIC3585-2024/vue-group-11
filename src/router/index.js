@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import MyBooks from '../views/MyBooks.vue'
+import CompletedBooks from '../views/CompletedBooks.vue'
 import RecommendedBooks from '../views/RecommendedBooks.vue'
 import AvailableBooks from '../views/AvailableBooks.vue'
+import FavoriteBooks from '../views/FavoriteBooks.vue'
 import NextBooks from '../views/NextBooks.vue'
 
 const router = createRouter({
@@ -15,8 +16,8 @@ const router = createRouter({
     },
     {
       path: '/mybooks',
-      name: 'mybooks',
-      component: MyBooks
+      name: 'completedbooks',
+      component: CompletedBooks
     },
     {
       path: '/recommended',
@@ -27,6 +28,11 @@ const router = createRouter({
       path: '/availables',
       name: 'availables',
       component: AvailableBooks
+    },
+    {
+      path: '/favorites',
+      name: 'favorites',
+      component: FavoriteBooks
     },
     {
       path: '/nextbooks',
