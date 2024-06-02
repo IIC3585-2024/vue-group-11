@@ -7,7 +7,7 @@
           <div v-show="showAtras" class="page" @click="flipPage" :style="transformBookData[currentPage].cover ? 'background-color: #3b2b1a; border: 0px; border-left: 5px solid #3b2b1a;' : ''">
           </div>
           <Transition name="flip" @before-enter="beforeEnter" @after-leave="afterLeave" v-if="currentPage !== numPages - 1">
-            <div v-show="show" :key="currentPage" class="page" @click="flipPage" style="position: fixed; top: 173px; left: 842px;">
+            <div v-show="show" :key="currentPage" class="page page-move" @click="flipPage">
               <img v-if="transformBookData[currentPage].cover" :src="transformBookData[currentPage].image" alt="Book cover" style="width: 100%; height: 100%;">
               <PageContent v-else :bookData="transformBookData[currentPage]"/>
             </div>
@@ -303,8 +303,9 @@ align-items: center;
 transform-origin: left center;
 }
 
-.movePage {
-  position: fixed; top: 173px; left: 843px;
+.page-move {
+  position: fixed;
+  margin-left: 37vh;
 }
 
 .flip-enter-active, .flip-leave-active {

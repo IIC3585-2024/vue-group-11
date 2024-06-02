@@ -20,7 +20,7 @@ export default {
       titlePage: "Libros Disponibles",
     };
   },
-  mounted() {
+  created() {
     this.fetchBooks(0);
   },
   methods: {
