@@ -134,6 +134,7 @@
   
   .book-title {
     text-align: center;
+    color: black;
     font-size: 16px;
     margin-top: 10px;
     transform: translate(-25%, 95%) rotate(-90deg);
@@ -157,7 +158,7 @@
   
   .navigation-arrows button {
     background-color: #814e1aa3;
-    color: white;
+    color: black;
     border: none;
     border-radius: 5px;
     padding: 10px;

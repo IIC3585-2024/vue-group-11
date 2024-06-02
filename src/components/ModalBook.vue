@@ -275,11 +275,11 @@ display: flex;
 }
 
 .table {
-	width: 860px;
-	height: 600px;
+	width: 60%;
+	height: 80%;
 	position: relative;
   justify-content: flex-end;
-	/* perspective: 1000px; */
+	perspective: 1000px;
   /* padding-right: 125px; */
   border-radius: 20px;
   background-color: #3b2b1a;
@@ -293,7 +293,7 @@ display: flex;
 }
 
 .page {
-width: 275px;
+width: 30%;
 height: 400px;
 background-color: #fff;
 border: 1px solid #ccc;
@@ -305,7 +305,7 @@ transform-origin: left center;
 
 .page-move {
   position: fixed;
-  margin-left: 37vh;
+  margin-left: 30%;
 }
 
 .flip-enter-active, .flip-leave-active {
