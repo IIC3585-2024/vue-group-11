@@ -1,11 +1,6 @@
-<!-- https://tutsprime.com/videos/vue-js-3-tutorial-build-a-reusable-modal-component-with-composition-api-and-transition -->
-
 <template>
   <div class="back-container">
     <h1 class="text-title">{{ titlePage }}</h1>
-    <div>
-      <button @click="this.$emit('redirectPage')" class="button-mybooks">{{ buttonText }}</button>
-    </div>
     <div class="navigation-arrows">
       <button @click="previousPage" class="arrow-left">&lt;</button>
       <button @click="nextPage" class="arrow-right">&gt;</button>
@@ -24,9 +19,6 @@
 
 <script>
 import ModalBook from './ModalBook.vue';
-import Modal from "./Modal.vue"
-import { ref } from "vue";
-import axios from 'axios'
 
 export default {
   name: 'BooksList',
@@ -34,11 +26,9 @@ export default {
     books: Array,
     currentPage: Number,
     titlePage: String,
-    buttonText: String
   },
   components: {    
     ModalBook,
-    Modal
   },
   created() {
     this.isOpen = Array(this.books.length).fill(false);
@@ -89,6 +79,7 @@ export default {
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 50px;
+  padding-bottom: 50px;
   background-color: #cbcdce;
 }
 
@@ -98,6 +89,25 @@ export default {
   grid-gap: 20px;
   border: #7b5d3e solid 20px;
   background-color: #ebac6e;
+}
+
+.navigation-arrows {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.navigation-arrows button {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.navigation-arrows button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .book-icon {
