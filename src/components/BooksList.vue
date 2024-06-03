@@ -97,7 +97,7 @@ export default {
 }
 
 .navigation-arrows button {
-  color: white;
+    color: black;
   border: none;
   border-radius: 5px;
   padding: 10px;
@@ -135,6 +135,7 @@ export default {
 .book-title {
   text-align: center;
   font-size: 16px;
+  color: black;
   margin-top: 10px;
   transform: translate(-25%, 95%) rotate(-90deg);
   height: 70px;

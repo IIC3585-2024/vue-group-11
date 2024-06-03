@@ -45,7 +45,7 @@ export default {
       favoriteBooks: [],
     };
   },
-  mounted() {
+  created() {
     if (localStorage.getItem('completedBooks')) {
       this.completedBooks = JSON.parse(localStorage.getItem('completedBooks'));
     }
@@ -100,3 +100,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+h1 {
+  color: white;
+}
+</style>

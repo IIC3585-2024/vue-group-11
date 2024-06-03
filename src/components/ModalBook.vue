@@ -7,7 +7,7 @@
           <div v-show="showAtras" class="page" @click="flipPage" :style="transformBookData[currentPage].cover ? 'background-color: #3b2b1a; border: 0px; border-left: 5px solid #3b2b1a;' : ''">
           </div>
           <Transition name="flip" @before-enter="beforeEnter" @after-leave="afterLeave" v-if="currentPage !== numPages - 1">
-            <div v-show="show" :key="currentPage" class="page" @click="flipPage" style="position: fixed; top: 173px; left: 842px;">
+            <div v-show="show" :key="currentPage" class="page page-move" @click="flipPage">
               <img v-if="transformBookData[currentPage].cover" :src="transformBookData[currentPage].image" alt="Book cover" style="width: 100%; height: 100%;">
               <PageContent v-else :bookData="transformBookData[currentPage]"/>
             </div>
@@ -275,11 +275,11 @@ display: flex;
 }
 
 .table {
-	width: 860px;
-	height: 600px;
+	width: 60%;
+	height: 80%;
 	position: relative;
   justify-content: flex-end;
-	/* perspective: 1000px; */
+	perspective: 1000px;
   /* padding-right: 125px; */
   border-radius: 20px;
   background-color: #3b2b1a;
@@ -293,7 +293,7 @@ display: flex;
 }
 
 .page {
-width: 275px;
+width: 30%;
 height: 400px;
 background-color: #fff;
 border: 1px solid #ccc;
@@ -303,15 +303,16 @@ align-items: center;
 transform-origin: left center;
 }
 
-.movePage {
-  position: fixed; top: 173px; left: 843px;
+.page-move {
+  position: fixed;
+  margin-left: 30%;
 }
 
-.flip-enter-active, .flip-leave-active {
+.flip-leave-active {
 transition: transform 0.8s ease-in-out;
 }
 
-.flip-enter, .flip-leave-to {
+.flip-leave-to {
 transform: rotateY(-90deg);
 }
 
