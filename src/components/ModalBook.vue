@@ -308,11 +308,11 @@ transform-origin: left center;
   margin-left: 30%;
 }
 
-.flip-enter-active, .flip-leave-active {
+.flip-leave-active {
 transition: transform 0.8s ease-in-out;
 }
 
-.flip-enter, .flip-leave-to {
+.flip-leave-to {
 transform: rotateY(-90deg);
 }
 

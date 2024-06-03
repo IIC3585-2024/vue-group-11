@@ -23,7 +23,5 @@ export default {
       this.booksData = JSON.parse(localStorage.getItem('completedBooks'));
     }    
   },
-  methods: {
-  }
 }
 </script>
