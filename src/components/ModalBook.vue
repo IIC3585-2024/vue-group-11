@@ -219,7 +219,7 @@ export default {
       currentCompletedBooks = currentCompletedBooks.filter(book => book.id !== this.bookData.id);
       localStorage.setItem('completedBooks', JSON.stringify(currentCompletedBooks));
       this.bookIsInCompleted = false;
-      if (this.$route.name === 'mybooks') {
+      if (this.$route.name === 'completedbooks') {
         window.location.reload();
       }
     },
@@ -309,7 +309,7 @@ transform-origin: left center;
 }
 
 .flip-leave-active {
-transition: transform 0.8s ease-in-out;
+transition: all 0.8s ease-in-out;
 }
 
 .flip-leave-to {
